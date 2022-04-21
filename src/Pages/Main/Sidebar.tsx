@@ -14,7 +14,7 @@ const Sidebar = ({ showHideSidebar }: { showHideSidebar: boolean }) => {
             type='button'
           ></button>
           <div className='lg:block text-left lg:pb-2 text-blueGray-600 mr-0 inline-block text-sm uppercase font-bold p-4 px-0'>
-            Crypto Markets
+            Crypto Tracker
           </div>
           <hr className='lg:min-w-full my-4' />
           <h6 className='lg:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline'>

@@ -14,8 +14,8 @@ const Header = ({ onShowHideSidebar }: { onShowHideSidebar: () => void }) => {
           >
             <GiHamburgerMenu size={42} className='text-white cursor-pointer' />
           </button>
-          <div className='text-white font-semibold text-md uppercase lg:inline-block'>
-            Crypto Tracker
+          <div className='text-white font-semibold text-md lg:inline-block'>
+            iFOLIO
           </div>
         </div>
         <Logo />
