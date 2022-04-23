@@ -82,7 +82,6 @@ const PieChart = ({ eachTokenPortfolio }: Props) => {
   useEffect(() => {
     mapTokenCost();
     mapTokenName();
-    console.log(eachTokenPortfolio);
   }, [eachTokenPortfolio]);
 
   const data = {

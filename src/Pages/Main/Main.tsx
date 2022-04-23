@@ -12,6 +12,7 @@ import PortfolioPage from "../Portfolio/PortfolioPage";
 import TokenMarketsPage from "../TokenMarkets/TokenMarketsPage";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Loading from "../../Components/UI/Loading";
+import { GiConsoleController } from "react-icons/gi";
 
 interface IMergedTransactions {
   [key: string]: Transaction;
@@ -120,7 +121,6 @@ const Main = () => {
 
   useEffect(() => {
     getFromAPI(10, 0);
-    getFromHistoryAPI("bitcoin");
   }, []);
 
   useEffect(() => {
@@ -129,7 +129,9 @@ const Main = () => {
   }, [userTransactions]);
 
   useEffect(() => {
-    getFromHistoryAPI(selectedToken.id || "");
+    if (selectedToken.id) {
+      getFromHistoryAPI(selectedToken.id);
+    }
   }, [selectedToken]);
 
   const calculatePortfolioTotal = () => {

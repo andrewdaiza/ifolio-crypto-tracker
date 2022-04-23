@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { ChangeEvent, useState } from "react";
 import { useEffect } from "react";
 import InputBase from "./InputBase";
@@ -14,7 +13,7 @@ const TransactionForm: React.FC<Props> = ({
   tokenData,
   addTransaction,
 }: Props) => {
-  const [amountCrypto, setAmountCrypto] = useState<string>("");
+  const [amountCrypto, setAmountCrypto] = useState<number>(0);
   const [transactionAmount, setTransactionAmount] = useState<number>(0);
   const [dropdownToken, setDropdownToken] = useState<string>("bitcoin");
   const [selectedTokenObject, setSelectedTokenObject] = useState<Token>({
@@ -73,7 +72,7 @@ const TransactionForm: React.FC<Props> = ({
         time: timeStamp,
         txID: id,
       });
-      setAmountCrypto("");
+      setAmountCrypto(0);
       setErrorMessage("");
       setErrorStyle("");
     }
@@ -113,11 +112,13 @@ const TransactionForm: React.FC<Props> = ({
             ${errorStyle}`}
             >
               <InputBase
+                disabled={false}
                 className='text-gray-900 text-sm p-2.5 border-r-2 dark:border-gray-400 dark:placeholder-gray-400 appearance-none outline-none whitespace-nowrap'
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setAmountCrypto(e.target.value)
+                onChange={(e: ChangeEvent<HTMLInputElement>): void =>
+                  setAmountCrypto(e.target.valueAsNumber)
                 }
                 value={amountCrypto}
+                selectedCoin={selectedTokenObject}
               />
             </div>
             <div className='text-sm text-red-600'>{errorMessage}</div>
@@ -131,10 +132,11 @@ const TransactionForm: React.FC<Props> = ({
             </label>
             <div className='flex w-full border lg:w-64 dark:border-gray-300 dark:placeholder-gray-400 mt-1'>
               <InputBase
-                disabled
+                disabled={true}
                 className='text-gray-400 text-sm p-2.5 border-r-2 dark:border-gray-300 dark:placeholder-gray-400 appearance-none input-none'
                 selectedCoin={selectedTokenObject}
                 value={transactionAmount}
+                onChange={function (e: ChangeEvent<HTMLInputElement>): void {}}
               />
             </div>
           </div>

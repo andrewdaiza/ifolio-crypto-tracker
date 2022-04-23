@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import TableList from "../../Components/Table/TableList";
 import Card from "../../Components/UI/Card";
@@ -66,6 +65,7 @@ const PortfolioPage = ({
       </Card>
       <div className='mx-auto max-w-screen-2xl'>
         <TableList
+          // @ts-expect-error
           tableItems={transactionPage}
           tableColumns={transactionColumns}
           title='Transactions'

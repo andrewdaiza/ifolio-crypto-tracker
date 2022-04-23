@@ -4,6 +4,9 @@ import { Token } from "../../Models/Model";
 interface Props {
   selectedCoin: Token;
   className: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: number;
+  disabled: boolean;
 }
 
 const InputBase = ({ selectedCoin, ...props }: Props) => (
