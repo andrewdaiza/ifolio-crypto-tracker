@@ -119,6 +119,7 @@ const TransactionForm: React.FC<Props> = ({
                 }
                 value={amountCrypto}
                 selectedCoin={selectedTokenObject}
+                name={"USD"}
               />
             </div>
             <div className='text-sm text-red-600'>{errorMessage}</div>
@@ -136,6 +137,7 @@ const TransactionForm: React.FC<Props> = ({
                 className='text-gray-400 text-sm p-2.5 border-r-2 dark:border-gray-300 dark:placeholder-gray-400 appearance-none input-none'
                 selectedCoin={selectedTokenObject}
                 value={transactionAmount}
+                name={selectedTokenObject.symbol}
                 onChange={function (e: ChangeEvent<HTMLInputElement>): void {}}
               />
             </div>
