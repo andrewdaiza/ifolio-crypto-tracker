@@ -14,9 +14,6 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Loading from "../../Components/UI/Loading";
 import { GiConsoleController } from "react-icons/gi";
 
-interface IMergedTransactions {
-  [key: string]: Transaction;
-}
 interface APIData {
   id: string;
   name: string;
@@ -26,22 +23,20 @@ interface APIData {
   marketCapUsd: string;
   changePercent24Hr: string;
 }
-
-interface APIHistory {
-  data: APIHistoryData[];
-}
 interface APIHistoryData {
   priceUsd: string;
   date: number;
   time?: number;
   [key: string]: any;
 }
+interface APIHistory {
+  data: APIHistoryData[];
+}
 
 const Main = () => {
   const [tokenData, setTokenData] = useState<Token[]>([]);
-  const [selectedHistoryData, setSelectedHistoryData] = useState<HistoryData[]>(
-    []
-  );
+
+  const [showHideSidebar, setShowHideSidebar] = useState<boolean>(false);
   const [selectedToken, setSelectedToken] = useState<Token>({
     name: "",
     price: 0,
@@ -51,12 +46,10 @@ const Main = () => {
     rank: 0,
     id: "",
   });
-  const [userTransactions, setUserTransactions] = useState<Transaction[]>([]);
-  const [totalPortfolio, setTotalPortfolio] = useState<number>(0);
-  const [eachTokenPortfolio, setEachTokenPortfolio] = useState<Transaction[]>(
+  const [selectedHistoryData, setSelectedHistoryData] = useState<HistoryData[]>(
     []
   );
-  const [showHideSidebar, setShowHideSidebar] = useState<boolean>(false);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const getFromAPI = async (limit: number, offset: number) => {
@@ -92,6 +85,7 @@ const Main = () => {
       console.error(e);
     }
   };
+
   const formatHistoryData = (apiData: APIHistory) => {
     return apiData.data
       .slice(0, 24)
@@ -124,48 +118,13 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
-    calculatePortfolioTotal();
-    calculateEachTokenAmount();
-  }, [userTransactions]);
-
-  useEffect(() => {
     if (selectedToken.id) {
       getFromHistoryAPI(selectedToken.id);
     }
   }, [selectedToken]);
 
-  const calculatePortfolioTotal = () => {
-    setTotalPortfolio(
-      userTransactions.reduce((r, a) => {
-        return r + a.cost;
-      }, 0)
-    );
-  };
-  const calculateEachTokenAmount = () => {
-    let addTransactions = userTransactions.reduce(
-      (merged: IMergedTransactions, transaction) => {
-        const { name, cost } = transaction;
-        const existing = merged[name];
-
-        if (existing) {
-          const { cost: existingCost } = existing;
-          existing.cost = existingCost + cost;
-        } else {
-          merged[name] = transaction;
-        }
-
-        return merged;
-      },
-      {}
-    );
-    setEachTokenPortfolio(Object.values(addTransactions));
-  };
-
   const handleSelectToken = (selectedToken: Token) => {
     setSelectedToken(selectedToken);
-  };
-  const handleTransaction = (transactions: Transaction[]) => {
-    setUserTransactions(transactions);
   };
 
   const handlePageClick = (clickPage: number) => {
@@ -176,7 +135,6 @@ const Main = () => {
     setShowHideSidebar(!showHideSidebar);
     console.log("ok");
   };
-
   return (
     <div className='grid md:grid-cols-8 w-screen lg:w-full'>
       <div className='sm:col-span-8 w-screen lg:w-full'>
@@ -205,10 +163,10 @@ const Main = () => {
               path='/portfolio'
               element={
                 <PortfolioPage
-                  totalPortfolio={totalPortfolio}
-                  eachTokenPortfolio={eachTokenPortfolio}
+                  // totalPortfolio={totalPortfolio}
+                  // eachTokenPortfolio={eachTokenPortfolio}
                   tokenData={tokenData}
-                  onTransaction={handleTransaction}
+                  // onTransaction={handleTransaction}
                 />
               }
             />

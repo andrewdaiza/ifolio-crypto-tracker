@@ -5,23 +5,55 @@ import { Token, Transaction } from "../../Models/Model";
 import Portfolio from "./Portfolio";
 import TransactionForm from "./TransactionForm";
 
-interface Props {
-  totalPortfolio: number;
-  eachTokenPortfolio: Transaction[];
-  tokenData: Token[];
-  onTransaction: (param: Transaction[]) => void;
+interface IMergedTransactions {
+  [key: string]: Transaction;
 }
 
-const PortfolioPage = ({
-  totalPortfolio,
-  eachTokenPortfolio,
-  tokenData,
-  onTransaction,
-}: Props) => {
+interface Props {
+  tokenData: Token[];
+}
+
+const PortfolioPage = ({ tokenData }: Props) => {
+  const [totalPortfolio, setTotalPortfolio] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [transactionPage, setTransactionPage] = useState<Transaction[]>([]);
   const [pageCount, setPageCount] = useState<number[]>([]);
   const [pageRange, setPageRange] = useState(5);
+  const [eachTokenPortfolio, setEachTokenPortfolio] = useState<Transaction[]>(
+    []
+  );
+
+  useEffect(() => {
+    const calculatePortfolioTotal = () => {
+      setTotalPortfolio(
+        transactions.reduce((r, a) => {
+          return r + a.cost;
+        }, 0)
+      );
+    };
+    const calculateEachTokenAmount = () => {
+      let addTransactions = transactions.reduce(
+        (merged: IMergedTransactions, transaction) => {
+          const { name, cost } = transaction;
+          const existing = merged[name];
+
+          if (existing) {
+            const { cost: existingCost } = existing;
+            existing.cost = existingCost + cost;
+          } else {
+            merged[name] = transaction;
+          }
+
+          return merged;
+        },
+        {}
+      );
+      setEachTokenPortfolio(Object.values(addTransactions));
+    };
+    calculatePortfolioTotal();
+    calculateEachTokenAmount();
+  }, [transactions]);
+
   const transactionColumns = ["ID", "Name", "Cost", "Amount", "Time"];
   useEffect(() => {
     let pageLength = Math.ceil(transactions.length / 5);
@@ -37,11 +69,9 @@ const PortfolioPage = ({
       setTransactionPage(
         [...transactions, transaction].slice(pageRange - 5, pageRange)
       );
-      onTransaction([...transactions, transaction]);
     } else {
       setTransactions([transaction]);
       setTransactionPage([transaction]);
-      onTransaction([transaction]);
     }
   };
   const handlePageClick = (page: number) => {
