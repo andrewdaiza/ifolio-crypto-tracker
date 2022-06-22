@@ -35,7 +35,6 @@ interface APIHistory {
 
 const Main = () => {
   const [tokenData, setTokenData] = useState<Token[]>([]);
-
   const [showHideSidebar, setShowHideSidebar] = useState<boolean>(false);
   const [selectedToken, setSelectedToken] = useState<Token>({
     name: "",
@@ -103,7 +102,7 @@ const Main = () => {
       });
   };
 
-  const getFromHistoryAPI = async (selectedTokenName: string) => {
+  const fetchPriceHistoryAPIData = async (selectedTokenName: string) => {
     try {
       let selectedFetch: APIHistory;
       selectedFetch = await fetchHistoryData(selectedTokenName);
@@ -120,7 +119,7 @@ const Main = () => {
 
   useEffect(() => {
     if (selectedToken.id) {
-      getFromHistoryAPI(selectedToken.id);
+      fetchPriceHistoryAPIData(selectedToken.id);
     }
   }, [selectedToken]);
 
