@@ -87,8 +87,9 @@ const Main = () => {
   };
 
   const formatHistoryData = (apiData: APIHistory) => {
+    const range = apiData.data.length - 1;
     return apiData.data
-      .slice(0, 24)
+      .slice(range - 24, range)
       .map((item: APIHistoryData): HistoryData => {
         let date = new Date(item.date);
         let hour = date.toLocaleString("en-US", {
@@ -133,7 +134,6 @@ const Main = () => {
   };
   const handleShowHideSidebar = () => {
     setShowHideSidebar(!showHideSidebar);
-    console.log("ok");
   };
   return (
     <div className='grid md:grid-cols-8 w-screen lg:w-full'>
@@ -161,14 +161,7 @@ const Main = () => {
             />
             <Route
               path='/portfolio'
-              element={
-                <PortfolioPage
-                  // totalPortfolio={totalPortfolio}
-                  // eachTokenPortfolio={eachTokenPortfolio}
-                  tokenData={tokenData}
-                  // onTransaction={handleTransaction}
-                />
-              }
+              element={<PortfolioPage tokenData={tokenData} />}
             />
           </Routes>
         </Router>
